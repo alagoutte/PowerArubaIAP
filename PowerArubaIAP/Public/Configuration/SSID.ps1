@@ -70,3 +70,51 @@ function Add-ArubaIAPSSID {
     End {
     }
 }
+
+function Remove-ArubaIAPSSID {
+
+    <#
+        .SYNOPSIS
+        Remove a SSID to Aruba Instant Cluster
+
+        .DESCRIPTION
+        Remove a SSID to Aruba Instant Cluster
+
+        .EXAMPLE
+        Remove-ArubaIAPSSID -SSID PowerArubaIAP-SSID
+
+        Remove the SSID named PowerArubaIAP-SSID
+
+    #>
+
+    Param(
+        [Parameter (Mandatory = $true)]
+        [string]$ssid
+    )
+
+    Begin {
+    }
+
+    Process {
+
+        $uri = "rest/ssid"
+
+        $ssid_profile = @{
+            "action"       = "delete"
+            "ssid-profile" = $ssid
+        }
+
+        $body = @{
+            "ssid-profile" = $ssid_profile
+        }
+
+        $body | Convertto-Json
+
+        $response = Invoke-ArubaIAPRestMethod -uri $uri -body $body -method 'POST'
+
+        $response
+    }
+
+    End {
+    }
+}
